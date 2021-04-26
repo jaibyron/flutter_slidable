@@ -795,9 +795,13 @@ class SlidableState extends State<Slidable>
       } else {
         open();
       }
-    } else if (_actionsMoveAnimation.value >= widget.showAllActionsThreshold ||
+    } else if (_actionsMoveAnimation.value >= 0.05 ||
         (shouldOpen && fast)) {
-      open();
+      if (velocity.sign > 0) {
+        close();
+      } else {
+        open();
+      }
     } else {
       close();
     }
