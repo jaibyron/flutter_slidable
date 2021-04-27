@@ -1,6 +1,14 @@
+## 0.6.0
+### Added
+* Null Safety Support
+
+## 0.5.7
+### Fixed
+* Formatting issues
+
 ## 0.5.6
 ### Fixed
-* Fixed color issue in SlideAction
+* Color issue in SlideAction
 
 ## 0.5.5
 ### Fixed

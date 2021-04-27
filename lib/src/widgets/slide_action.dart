@@ -11,18 +11,17 @@ abstract class ClosableSlideAction extends StatelessWidget {
   ///
   /// The [closeOnTap] argument must not be null.
   const ClosableSlideAction({
-    Key key,
+    Key? key,
     this.color,
     this.onTap,
     this.closeOnTap = _kCloseOnTap,
-  })  : assert(closeOnTap != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// The background color of this action.
-  final Color color;
+  final Color? color;
 
   /// A tap has occurred.
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   /// Whether close this after tap occurred.
   ///
@@ -67,19 +66,19 @@ class SlideAction extends ClosableSlideAction {
   ///
   /// The [closeOnTap] argument must not be null.
   SlideAction({
-    Key key,
-    @required this.child,
-    VoidCallback onTap,
-    Color color,
-    Decoration decoration,
+    Key? key,
+    required this.child,
+    VoidCallback? onTap,
+    Color? color,
+    Decoration? decoration,
     bool closeOnTap = _kCloseOnTap,
-  })  : assert(child != null),
-        assert(decoration == null || decoration.debugAssertIsValid()),
+  })  : assert(decoration == null || decoration.debugAssertIsValid()),
         assert(
             color == null || decoration == null,
             'Cannot provide both a color and a decoration\n'
             'The color argument is just a shorthand for "decoration:  BoxDecoration(color: color)".'),
-        decoration = decoration ?? (color != null ? BoxDecoration(color: color) : null),
+        decoration =
+            decoration ?? (color != null ? BoxDecoration(color: color) : null),
         super(
           key: key,
           onTap: onTap,
@@ -92,7 +91,7 @@ class SlideAction extends ClosableSlideAction {
   /// A shorthand for specifying just a solid color is available in the
   /// constructor: set the `color` argument instead of the `decoration`
   /// argument.
-  final Decoration decoration;
+  final Decoration? decoration;
 
   /// The [child] contained by the slide action.
   final Widget child;
@@ -115,52 +114,50 @@ class IconSlideAction extends ClosableSlideAction {
   ///
   /// The [closeOnTap] argument must not be null.
   const IconSlideAction({
-    Key key,
+    Key? key,
     this.icon,
     this.iconWidget,
     this.caption,
-    Color color,
+    Color? color,
     this.foregroundColor,
-    VoidCallback onTap,
+    VoidCallback? onTap,
     bool closeOnTap = _kCloseOnTap,
-  })  : color = color ?? Colors.white,
-        assert(icon != null || iconWidget != null, 'Either set icon or iconWidget.'),
+  })  : assert(icon != null || iconWidget != null,
+            'Either set icon or iconWidget.'),
         super(
           key: key,
-          color: color,
+          color: color ?? Colors.white,
           onTap: onTap,
           closeOnTap: closeOnTap,
         );
 
   /// The icon to show.
-  final IconData icon;
+  final IconData? icon;
 
   /// A custom widget to represent the icon.
   /// If both [icon] and [iconWidget] are set, they will be shown at the same
   /// time.
-  final Widget iconWidget;
+  final Widget? iconWidget;
 
   /// The caption below the icon.
-  final String caption;
-
-  /// The background color.
-  ///
-  /// Defaults to [Colors.white].
-  final Color color;
+  final String? caption;
 
   /// The color used for [icon] and [caption].
-  final Color foregroundColor;
+  final Color? foregroundColor;
 
   @override
   Widget buildAction(BuildContext context) {
-    final Color estimatedColor = ThemeData.estimateBrightnessForColor(color) == Brightness.light ? Colors.black : Colors.white;
+    final Color estimatedColor =
+        ThemeData.estimateBrightnessForColor(color!) == Brightness.light
+            ? Colors.black
+            : Colors.white;
 
     final List<Widget> widgets = [];
 
     if (icon != null) {
       widgets.add(
         Flexible(
-          child: new Icon(
+          child: Icon(
             icon,
             color: foregroundColor ?? estimatedColor,
           ),
@@ -170,7 +167,7 @@ class IconSlideAction extends ClosableSlideAction {
 
     if (iconWidget != null) {
       widgets.add(
-        Flexible(child: iconWidget),
+        Flexible(child: iconWidget!),
       );
     }
 
@@ -178,20 +175,21 @@ class IconSlideAction extends ClosableSlideAction {
       widgets.add(
         Flexible(
           child: Text(
-            caption,
+            caption!,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).primaryTextTheme.caption.copyWith(color: foregroundColor ?? estimatedColor),
+            style: Theme.of(context)
+                .primaryTextTheme
+                .caption!
+                .copyWith(color: foregroundColor ?? estimatedColor),
           ),
         ),
       );
     }
 
-    return Container(
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: widgets,
-        ),
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: widgets,
       ),
     );
   }
