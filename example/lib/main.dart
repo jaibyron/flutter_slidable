@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
       key: Key(item.title),
       controller: slidableController,
       direction: direction,
-      //beginToSlide:0.2,
+      beginToSlide:0.2,
       movementDuration: Duration(milliseconds: 400),
       dismissal: SlidableDismissal(
         child: SlidableDrawerDismissal(),
