@@ -415,6 +415,7 @@ class Slidable extends StatefulWidget {
     SlidableDismissal dismissal,
     SlidableController controller,
     double fastThreshold,
+    double beginToSlide = 0.01
   }) : this.builder(
           key: key,
           child: child,
@@ -431,6 +432,7 @@ class Slidable extends StatefulWidget {
           dismissal: dismissal,
           controller: controller,
           fastThreshold: fastThreshold,
+          beginToSlide: beginToSlide,
         );
 
   /// Creates a widget that can be slid.
@@ -462,6 +464,7 @@ class Slidable extends StatefulWidget {
     this.enabled = true,
     this.dismissal,
     this.controller,
+    this.beginToSlide = 0.05,
     double fastThreshold,
   })  : assert(actionPane != null),
         assert(direction != null),
@@ -482,6 +485,11 @@ class Slidable extends StatefulWidget {
         assert(fastThreshold == null || fastThreshold >= .0,
             'fastThreshold must be positive'),
         fastThreshold = fastThreshold ?? _kFastThreshold,
+        assert(
+              beginToSlide != null &&
+            beginToSlide >= .0 &&
+            beginToSlide <= 1.0,
+        'beginToSlide must be between 0.0 and 1.0'),
         super(key: key);
 
   /// The widget below this widget in the tree.
@@ -534,6 +542,11 @@ class Slidable extends StatefulWidget {
 
   /// The threshold used to know if a movement was fast and request to open/close the actions.
   final double fastThreshold;
+
+  /// Represented as a fraction, e.g. if it is 0.05 (the default), then the slider
+  /// has to be dragged at least 5% before it opens or closes
+  final double beginToSlide;
+
 
   /// The state from the closest instance of this class that encloses the given context.
   static SlidableState of(BuildContext context) {
@@ -795,7 +808,7 @@ class SlidableState extends State<Slidable>
       } else {
         open();
       }
-    } else if (_actionsMoveAnimation.value >= 0.05 ||
+    } else if (_actionsMoveAnimation.value >= widget.beginToSlide ||
         (shouldOpen && fast)) {
       if (velocity.sign > 0) {
         close();
